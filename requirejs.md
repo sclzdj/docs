@@ -6,17 +6,17 @@
 
 > css[d]#
 >
-> 	>libs[d]#第三方css包
-> 	>
-> 	>> bootstrap.min.css[f]
-> 	>>
-> 	>> font-awesome.min.css[f]
-> 	>
-> 	>custom.css[f]#其它自写css
-> 	>
-> 	>app.css[f]#其它自写css
-> 	>
-> 	>......
+> >libs[d]#第三方css包
+> >
+> >> bootstrap.min.css[f]
+> >>
+> >> font-awesome.min.css[f]
+> >
+> >custom.css[f]#其它自写css
+> >
+> >app.css[f]#其它自写css
+> >
+> >......
 >
 > js[d]#
 >
