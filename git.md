@@ -12,7 +12,7 @@ git remote add origin {git地址}
 git push -u origin master
 ```
 
-### 第二次提交
+### 后续提交
 
 ```
 git add .
