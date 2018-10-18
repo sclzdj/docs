@@ -15,6 +15,8 @@ git push -u origin master
 ### 第二次提交
 
 ```
-
+git add .
+git commit -m "commit"
+git push -u origin master
 ```
 
