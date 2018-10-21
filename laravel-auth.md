@@ -10,8 +10,8 @@ guards项
 
 ```
 'admin' => [//填守卫名称
-    'driver' => 'session',//填存储机制
-    'provider' => 'bs_admins',//填表名
+    'driver' => 'session',//填存储驱动
+    'provider' => 'bs_admins',#使用哪个服务提供者，一般填表名
 ],
 ```
 
@@ -20,8 +20,8 @@ guards项
 providers项
 
 ```
-'bs_admins' => [//填表名
-    'driver' => 'eloquent',//填服务机制
+'bs_admins' => [//服务提供者名称
+    'driver' => 'eloquent',//填驱动机制
     'model' => \App\Model\Admin\Admin::class,//填模型名
 ],
 ```

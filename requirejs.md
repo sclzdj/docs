@@ -11,6 +11,8 @@
 > >> bootstrap.min.css[f]
 > >>
 > >> font-awesome.min.css[f]
+> >>
+> >> ......
 > >
 > >custom.css[f]#其它自写css
 > >
@@ -33,6 +35,8 @@
 > > > bootstrap.min.js[f]
 > > >
 > > > vue.min.js[f]
+> > >
+> > > ......
 > >
 > > main.js[f]#必须，入口文件
 > >
@@ -50,6 +54,10 @@
 >
 > imgs[d]
 >
+> > fa.ico[f]
+> >
+> > head.jpg[f]
+> >
 > > ......
 >
 > index.php[f]

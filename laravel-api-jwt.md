@@ -1,10 +1,12 @@
-# API
+# Dingo
 
 ## 安装组件
 
 ### composer安装
 
-`composer require dingo/api:2.0.0-alpha2`
+```
+composer require dingo/api:2.0.0-alpha2
+```
 
 ### 生成配置文件
 
@@ -21,10 +23,10 @@ php artisan vendor:publish
 ```
 #接口围绕：x：本地私有环境 prs：公司内部APP或小程序使用 vnd：公开接口
 'standardsTree' => env('API_STANDARDS_TREE', 'prs'),
-#版本号
-'version' => env('API_VERSION', 'v1'),
 #项目名称
 'subtype' => env('API_SUBTYPE', 'blog'),
+#版本号
+'version' => env('API_VERSION', 'v1'),
 #前缀（和域名二选一）
 'prefix' => env('API_PREFIX', 'api'),
 #域名（和前缀二选一）
@@ -39,7 +41,6 @@ php artisan vendor:publish
 
 ```
 $api=app(\Dingo\Api\Routing\Router::class);
-
 #默认指定的是v1版本和前缀方式，则直接通过 {host}/{前缀}/{接口名} 访问即可
 #namespace为API控制器公共命名空间
 $api->version('v1',['namespace'=>'\App\Http\Controllers\Api'],function ($api){
@@ -139,19 +140,25 @@ class UserController extends BaseController
 #### 无内容响应
 
 ```
-return $this->response->noContent();
+return $this->response->noContent();#204 #一般都用这个
 ```
 
 #### 创建了资源的响应
 
 ```
-return $this->response->created();
+return $this->response->created();#201
 ```
 
-你可以现则在第一个参数的位置，提供创建的资源的位置。
+你可以在第一个参数的位置，提供创建的资源的位置。第二个参数提供内容信息。
 
 ```
-return $this->response->created($location);
+return $this->response->created($location,$content);#201
+```
+
+#### 接受请但未处理响应
+
+```
+return $this->response->accepted();#202
 ```
 
 #### 错误响应
@@ -159,29 +166,26 @@ return $this->response->created($location);
 这有很多不同的方式创建错误响应，你可以快速的生成一个错误响应。
 
 ```
-// A generic error with custom message and status code.
 // 一个自定义消息和状态码的普通错误。
-return $this->response->error('This is an error.', 404);
+return $this->response->error('This is an error.', 400);
 
-// A not found error with an optional message as the first parameter.
-// 一个没有找到资源的错误，第一个参数可以传递自定义消息。
-return $this->response->errorNotFound();
+//#400 一个 bad request 错误，第一个参数可以传递自定义消息。
+return $this->response->errorBadRequest();   #一般的错误都用这个
 
-// A bad request error with an optional message as the first parameter.
-// 一个 bad request 错误，第一个参数可以传递自定义消息。
-return $this->response->errorBadRequest();
+//#401 一个未认证错误，第一个参数可以传递自定义消息。
+return $this->response->errorUnauthorized();
 
-// A forbidden error with an optional message as the first parameter.
-// 一个服务器拒绝错误，第一个参数可以传递自定义消息。
+//#403 一个服务器拒绝错误，第一个参数可以传递自定义消息。
 return $this->response->errorForbidden();
 
-// An internal error with an optional message as the first parameter.
-// 一个内部错误，第一个参数可以传递自定义消息。
-return $this->response->errorInternal();
+//#404 一个没有找到资源的错误，第一个参数可以传递自定义消息。
+return $this->response->errorNotFound();
 
-// An unauthorized error with an optional message as the first parameter.
-// 一个未认证错误，第一个参数可以传递自定义消息。
-return $this->response->errorUnauthorized();
+//#405一个方法不允许错误，第一个参数可以传递自定义消息。
+return $this->response->errorMethodNotAllowed();
+
+//#500 一个内部错误，第一个参数可以传递自定义消息。
+return $this->response->errorInternal();
 ```
 
 ### 添加额外的头信息
@@ -296,6 +300,53 @@ class CategoryTransformer extends TransformerAbstract
 
 {host}/{前缀}/{接口名}?include={关联1},{关联2},{关联3}...
 
+## 导出文档
+
+```
+php artisan api:docs --name uun.dj/api --use-version v1 --output-file "C:\Users\Administrator\Desktop\api\uun.md"
+```
+
+> --name   文档主题 
+
+> --use-version   API版本号
+
+> --output-file   导出位置
+
+代码注释必须按照规定格式，否则导出文档时报错，简单示例：
+
+```
+/**
+ * 账号控制器
+ * @Resource("/bs/system/admin")
+ */
+class AdminController extends AuthAdminController
+{
+    /**
+     * 账号列表
+     * @Versions({"v1"})
+     * @Get("/index{?page,limit}")
+     * @Request(contentType="application/json")
+     * @Parameters({
+     * 		@Parameter("page",type="int",default=1,required=false,description="页码"),
+     *      @Parameter("limit",type="int",default="system",description="每页长度"),
+     *      @Parameter("username",type="string",default=null,description="账号"),
+     *      @Parameter("nickname",type="string",description="昵称"),
+     *      @Parameter("status",type="options",description="状态[0,1]"),
+     *      @Parameter("created_at_start",type="string",description="开始日期[Y-m-d]"),
+     *      @Parameter("created_at_end",type="string",description="结束日期[Y-m-d]")
+     * })
+     * @Response(200,body=null)
+     */
+    public function index(Request $request)
+    {
+        //......
+    }
+    //......
+}
+```
+
+
+
 # JWT
 
 ## 安装组件
@@ -316,7 +367,7 @@ php artisan vendor:publish
 
 ### 修改配置文件
 
-打开配置文件config/api.php
+打开配置文件config/jwt.php
 
 ```
 #令牌过期时间（分钟），设置null永久不过期
@@ -340,12 +391,10 @@ php artisan jwt:secret
 下面示例用户模型：
 
 ```
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Modules\Article\Entities\Comment;
+use Illuminate\Notifications\Notifiable;#必须引用
+use Illuminate\Foundation\Auth\User as Authenticatable;#必须引用
 use Tymon\JWTAuth\Contracts\JWTSubject;#必须引用
 
-#继承jwt权限接口
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -374,10 +423,16 @@ config/auth.php
 守卫使用jwt保护来为借口身份验证提供支持
 
 ```
-'guards' => [
+'guards' => [#守卫列表
         'api' => [   #守卫名称，可定义多个实现多守卫
             'driver' => 'jwt',  #使用jwt驱动
-            'provider' => 'users', #使用哪张表
+            'provider' => 'users', #使用哪个服务提供者，一般填表名
+        ],
+    ],
+'providers' => [#服务提供者列表
+        'users' => [#服务提供者名称，可定义多个服务提供者
+            'driver' => 'eloquent',#使用模型驱动
+            'model' => App\User::class,#模型名称
         ],
     ],
 ```
@@ -455,7 +510,7 @@ class AuthController extends BaseController
     {
         auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => '成功退出']);
     }
 
     //获取用户资料接口
@@ -479,3 +534,37 @@ class AuthController extends BaseController
 需要设置请求头 
 
 Authorization:Bearer {token}
+
+# 状态码
+
+### 错误类
+
+> 400  请求错误
+>
+> 401  认证错误
+>
+> 403  拒绝服务
+>
+> 404  资源未找到
+>
+> 405  方法不允许
+>
+> 422  请求数据验证错误 
+>
+> 500  内部错误，token传错时也报此错误
+
+### 成功类
+
+> 200  成功     服务器已成功处理了请求
+>
+> 201  创建     表示服务器执行成功，并且创建了新的资源
+>
+> 202  已接受   服务器接受请求，但未处理
+>
+> 203  非授权信息  服务器成功执行了请求，但是返回的信息可能来自另一来源
+>
+> 204  空内容    服务器成功执行请求，但是没有返回信息
+>
+> 205  重置内容   服务器成功执行了请求，但是但是没有返回内容，与204不同，他需要请求者重置文档视图（比如，清除表单内容，重新输入）
+>
+> 206  部分内容  服务器成功执行了部分请求
