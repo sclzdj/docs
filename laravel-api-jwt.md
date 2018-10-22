@@ -461,7 +461,7 @@ $api->version('v1',['namespace'=>'\App\Http\Controllers\Api'],function ($api){
         #退出
         $api->get('logout','AuthController@logout');
         #个人资料（可有可无）
-        $api->get('me','AuthController@me');
+        $api->get('info','AuthController@info');
         #刷新token（一般不定义）
         #$api->get('refresh','AuthController@me');
     });
@@ -480,52 +480,80 @@ class AuthController extends BaseController
     public function __construct()
     {
         // 除login外都需要验证
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:admin', ['except' => ['login']]);
     }
-    
-    //响应token
+    /**
+     * 响应token
+     * @param $token
+     * @return mixed
+     */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return $this->response()->array([
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => auth('api')->factory()->getTTL() * 60,
+            'expires_in'   => auth('admin')->factory()->getTTL() * 60,
         ]);
     }
-
-    //登录接口
+    /**
+     * 登录
+     * @Versions({"v1"})
+     * @Post("/bs/login/admin")
+     * @Request(contentType="application/json")
+     * @Parameters({
+     *      @Parameter("username",type="string",required=true,description="账号"),
+     *      @Parameter("password",type="string",required=true,description="密码")
+     * })
+     * @Response(200,body=null)
+     */
     public function login()
     {
-        $credentials = request(['email', 'password']);
-
-        if (!$token = auth('api')->attempt($credentials)) {
+        $request = request(['username', 'password']);
+        if(!isset($request['username']) || $request['username']==='' || $request['username']===null){
+            return $this->response->errorUnauthorized('请输入帐号');
+        }
+        if(!isset($request['password']) || $request['password']==='' || $request['username']===null){
+            return $this->response->errorUnauthorized('请输入密码');
+        }
+        if (!$token = auth('admin')->attempt($request)) {
             return $this->response->errorUnauthorized('帐号或密码错误');
         }
-
         return $this->respondWithToken($token);
     }
-
-    //退出接口
+    /**
+     * 退出
+     * @Versions({"v1"})
+     * @Get("/bs/logout/admin")
+     * @Request(contentType="application/json")
+     * @Response(204,body=null)
+     */
     public function logout()
     {
-        auth('api')->logout();
-
-        return response()->json(['message' => '成功退出']);
+        auth('admin')->logout();
+        return $this->response()->noContent();
     }
-
-    //获取用户资料接口
-    public function me()
+    /**
+     * 账号资料
+     * @Versions({"v1"})
+     * @Get("/bs/info/admin")
+     * @Request(contentType="application/json")
+     * @Response(200,body=null)
+     */
+    public function info()
     {
-        return $this->response()->array(auth('api')->user());
-        //return response()->json(auth('api')->user());
+        return $this->response()->item(auth('admin')->user(),new AdminTransformer());
     }
-
-    //刷新token接口
+    /**
+     * 刷新token
+     * @Versions({"v1"})
+     * @Get("/bs/refresh/admin")
+     * @Request(contentType="application/json")
+     * @Response(200,body=null)
+     */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        return $this->respondWithToken(auth('admin')->refresh());
     }
-
 }
 ```
 
@@ -568,3 +596,17 @@ Authorization:Bearer {token}
 > 205  重置内容   服务器成功执行了请求，但是但是没有返回内容，与204不同，他需要请求者重置文档视图（比如，清除表单内容，重新输入）
 >
 > 206  部分内容  服务器成功执行了部分请求
+
+### 判断方法
+
+```
+if({code}>=200 && {code}<=299){	
+	#成功
+}else{
+	#错误
+	#弹出信息
+	//{message}--普通错误提示
+	//{errors}--验证错误提示，是数组
+}
+```
+

@@ -118,15 +118,19 @@ substr {key} {start-index} {end-index}
 ```
 #在key左边添加一个元素
 lpush {key} {member}
-
 #在key右边添加一个元素
 rpush {key} {member}
 
-#从key左边删除一个元素
+#从key左边取出一个元素
 lpop {key}
-
-#从key右边删除一个元素
+#从key右边取出一个元素
 rpop {key}
+
+#【返回值】假如在指定时间内没有任何元素被弹出，则返回一个 nil 和等待时长。反之，返回一个含有两个元素的列表，第一个元素是被弹出元素所属的 key ，第二个元素是被弹出元素的值。
+###当给定多个key参数时，按参数key的先后顺序依次检查各个列表，弹出第一个非空列表的左边元素
+blpop {key1} {key2} ...... {keyN} {seconds}
+###当给定多个key参数时，按参数key的先后顺序依次检查各个列表，弹出第一个非空列表的右边元素
+brpop {key1} {key2} ...... {keyN} {seconds}
 
 #返回list的长度，key不存在返回0，如果key类型不是list返回错误
 llen {key}
