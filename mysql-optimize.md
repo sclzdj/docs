@@ -121,7 +121,7 @@ flush table {table-name}
 >
 > 支持并发插入。写操作中的插入操作，不会阻塞读操作（其他操作）
 
-#### #Innodb PK myisam
+#### Innodb PK myisam
 
 > innodb：数据完整性，并发性处理，擅长更新，删除。
 
@@ -147,7 +147,7 @@ MySQL提供一个可以将多个结构相同的myisam表，合并到一起的存
 
 ### 2.字段类型
 
-#### 原则
+选择原则
 
 > **尽可能小（占用存储空间少）**
 >
@@ -173,25 +173,23 @@ MySQL提供一个可以将多个结构相同的myisam表，合并到一起的存
 >
 > **多用位运算**
 
-
-
 ### 3.范式和逆范式
 
 表设计应该遵循第三范式，设计阶段可以考虑逆范式。
 
-#### 第一范式
+**第一范式**
 
 > 表之间数据完全无关联
 
-#### 第二范式
+**第二范式**
 
 >表之间数据有关联字段，但表之间存在冗余字段
 
-#### 第三范式
+**第三范式**
 
 >表之间数据有关联字段，表之间不存在冗余字段
 
-#### 逆范式
+**逆范式**
 
 >一般用于统计字段设计，维护成本高，设计阶段可考虑。
 
@@ -224,19 +222,19 @@ MySQL提供一个可以将多个结构相同的myisam表，合并到一起的存
 
 #### 索引类型
 
-##### 普通索引
+**普通索引**
 
 index：	对关键字没有要求。
 
-##### 唯一索引
+**唯一索引**
 
 unique index：	要求关键字不能重复。同时增加唯一约束。
 
-##### 主键索引
+**主键索引**
 
 primary key：	要求关键字不能重复，也不能为NULL。同时增加主键约束。
 
-##### 全文索引
+**全文索引**
 
 fulltext key：	关键字的来源不是所有字段的数据，而是从字段中提取的特别关键词。
 
@@ -294,7 +292,7 @@ alter table {table-name}
 
 #### 索引的使用
 
-##### 使用场景
+**使用场景**
 
 建立索引索引时，不要仅仅考虑where检索，同时考虑其他的使用场景。
 
@@ -306,7 +304,7 @@ alter table {table-name}
 
 > **索引覆盖**：索引拥有的关键字内容，覆盖了查询所需要的全部数据，此时，就不需要在数据区获取数据，仅仅在索引区即可。
 
-##### 使用原则
+**使用原则**
 
 > **列独立**：如果需要某个字段上使用索引，则需要在字段参与的表达中，保证字段独立在一侧
 >
@@ -502,9 +500,9 @@ alert table {table-name} add partition （
 alert table {table-name} drop partition p_min70;
 ```
 
-采用取余算法的分区数量的修改，不会导致已有分区数据的丢失，需要重新分配数据到新大地分区。
+采用取余算法的分区数量的修改，不会导致已有分区数据的丢失，会重新分配数据到新分区。
 
-删除条件算法的分区，导致分区数据丢失
+删除条件算法的分区，导致分区数据**丢失**
 
 **选择分区算法**
 
@@ -518,7 +516,7 @@ alert table {table-name} drop partition p_min70;
 
 > 将select的结果，存取起来共二次使用的缓存域
 
-#### 操作方式
+**操作方式**
 
 ```
 #查看查询缓存状态
@@ -529,7 +527,7 @@ set global query_cache_type=1 ;
 set global query_cache_size=1024*1024*30;#单位：B 
 ```
 
-#### 注意事项
+**注意事项**
 
 > 查询缓存存在判断是严格依赖于select语句本身的：严格保证SQL一致
 
@@ -545,7 +543,7 @@ set global query_cache_size=1024*1024*30;#单位：B
 
 当客户端操作表（记录）时，为了保证操作的隔离性（多个客户端操作不能互相影响），通过加锁来处理。
 
-#### 读锁
+**读锁**
 
 > 又叫共享锁，乐观锁，S-lock
 >
@@ -555,7 +553,7 @@ set global query_cache_size=1024*1024*30;#单位：B
 SELECT * FROM {table_name} WHERE ... LOCK IN SHARE MODE #
 ```
 
-#### 写锁
+**写锁**
 
 > 又叫独占锁，排他锁，悲观锁，X-lock
 >
@@ -565,9 +563,7 @@ SELECT * FROM {table_name} WHERE ... LOCK IN SHARE MODE #
 SELECT * FROM {table_name} WHERE ... FOR UPDATE
 ```
 
-
-
-#### #锁定粒度
+**锁定粒度**
 
 即锁的范围
 
@@ -632,7 +628,93 @@ Mysql中有一种日志叫做**bin日志**（二进制日志）。这个日志�
 
 #### 实际的配置
 
+##### 主服务器
 
+修改mysql的配置文件my.ini：
+
+- 开启bin日志
+
+```
+log-bin=mysql-bin
+```
+
+-  为服务器指定一个server-id（主从服务器的ID值不能重复）
+
+```
+server-id=1
+```
+
+-  如果是**环形**的服务器需要添加以下项：
+
+```
+log-slave-updates = on   
+```
+
+登录MYSQL，执行SQL：
+
+- 在主服务器上为从服务器创建一个用来同步数据的账号
+
+```
+#创建了一个只有REPLICATION SLAVE权限的账号：用户名：slave 密码：123456
+
+GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' IDENTIFIED BY '123456';
+```
+
+- 在主服务器执行SQL查看主服务器当前bin日志的状态
+
+```
+show master status;
+
+#file和postion对应值分别为从服务器SQL的master_log_file和master_log_pos配置
+```
+
+注意：每次修改数据时这两个值都会改变，所以在查看了这两个值之后，不要操作主服务器、直接到从服务器配置完成之后，否则这个值对应不上会同步失败。
+
+##### 从服务器
+
+修改mysql的配置文件my.ini：
+
+- 开启bin日志
+
+```
+log-bin=mysql-bin
+```
+
+-  为服务器指定一个server-id（主从服务器的ID值不能重复）
+
+```
+server-id=2
+```
+
+-  如果是**环形**的服务器需要添加以下项：
+
+```
+log-slave-updates = on   
+```
+
+登录MYSQL，执行SQL：
+
+- 设置从服务器并启动复制功能
+
+```
+stop slave;
+
+change master to master_host='192.168.0.1',master_user='slave',master_password='123456',master_log_file='mysql-bin.000027',master_log_pos=372;
+
+start slave;
+```
+
+- 查询从服务器的状态是否配置成功
+
+```
+show slave status;
+
+#slave_IO_Running:Yes
+#slave_SQL_Running:Yes
+#上面两项显示yes则从服务器配置成功
+```
+
+- 在配置成功之前，主服务器上的数据不会自动到从服务器上来。所以需要在配置之前先把主服务器上的所有数据先手动的导到从服务器上来，然后配置完主从之后，数据以后就同步了。
 
 ### 3.负载均衡
 
@@ -697,7 +779,7 @@ PK
 Insert into {table-name}values (), (), (), (), ();
 ```
 
-##### 分页
+### 分页
 
 Limit {offset}, {size};的使用，会大大提升无效数据的检索（被跳过）。
 
@@ -705,7 +787,7 @@ Limit {offset}, {size};的使用，会大大提升无效数据的检索（被跳
 
 Limit offset, size;
 
-##### rand()
+### rand()
 
 尽量不要用order by rand()
 

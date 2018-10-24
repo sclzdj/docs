@@ -427,9 +427,3 @@ while($data->hasNext()){
 > 原生是.语法，php是->语法
 >
 > php括号里面的参数和原生完全一致
-
-实例1：备份 test 数据库到d:\bk
-​	mongodump -d test -o D:\bk
-
-实例2： 恢复test数据库到test1数据库中
-​	mongorestore -d test1 -drop D:\bk\test
