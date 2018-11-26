@@ -555,6 +555,112 @@ const util = {
 export default util
 ```
 
+### 文件上传
+
+#### 上传类
+
+upload.js
+
+```
+import wepy from 'wepy'
+import util from '@/service/util'
+
+const uploadHost = 'http://www.sclzdj.cn/index.php/api/upload'
+
+const upload = {
+  upload: async (tempFilePath, name = 'file', formData = {'type': 'image'}) => {
+    let response = await wepy.uploadFile({
+      url: uploadHost,
+      filePath: tempFilePath,
+      name: name,
+      formData: formData
+    })
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return JSON.parse(response.data)
+    } else {
+      util.showToast(response.data.message || response.errMsg)
+      return false
+    }
+  },
+
+  image: async (sizeType = ['original', 'compressed'], sourceType = ['album', 'camera']) => {
+    let data = await wepy.chooseImage({
+      count: 1,
+      sizeType: sizeType,
+      sourceType: sourceType
+    })
+    wepy.showLoading({title: '上传中...'})
+    let response = await upload.upload(data.tempFilePaths[0])
+    wepy.hideLoading()
+    return response
+  },
+
+  images: async (count = 9, sizeType = ['original', 'compressed'], sourceType = ['album', 'camera']) => {
+    let data = await wepy.chooseImage({
+      count: count > 9 ? 9 : count,
+      sizeType: sizeType,
+      sourceType: sourceType
+    })
+    return data.tempFilePaths
+  },
+
+  video: async (compressed = false, maxDuration = 60, camera = 'back', sourceType = ['album', 'camera']) => {
+    let data = await wepy.chooseVideo({
+      compressed: compressed,
+      maxDuration: maxDuration,
+      camera: camera,
+      sourceType: sourceType
+    })
+    wepy.showLoading({title: '上传中...'})
+    let response = await upload.upload(data.tempFilePaths[0], 'file', {'type': 'video'})
+    wepy.hideLoading()
+    return response
+  }
+}
+
+export default upload
+```
+
+#### 调用方法
+
+wpy文件中调用
+
+```
+  import wepy from 'wepy'
+  import util from '@/service/util'
+  import upload from '@/service/upload'
+
+  export default class Index extends wepy.page {
+    data = {
+      upload_img: '',
+      upload_imgs: []
+    }
+
+    async uploadImg() {
+      let response = await upload.image()
+      if (response !== false) {
+        this.upload_img = 'http://www.sclzdj.cn/' + response.data.path
+        this.$apply()
+      }
+    }
+
+    async uploadImgs() {
+      let response = await upload.images()
+      wepy.showLoading({title: '上传中...'})
+      response.forEach(async (v, k) => {
+        let res = await upload.upload(v)
+        if (res !== false) {
+          this.upload_imgs = this.upload_imgs.concat(['http://www.sclzdj.cn/' + res.data.path])
+          this.$apply()
+        }
+        if (k + 1 === response.length) {
+          wepy.hideLoading()
+        }
+      })
+    }
+ }
+```
+
 ## weUI
 
 样式库https://github.com/wepyjs/wepy-weui-demo
