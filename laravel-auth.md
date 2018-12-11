@@ -1,4 +1,4 @@
-# 登录权限
+# 登录功能示例
 
 ## 修改配置文件
 
@@ -36,7 +36,7 @@ providers项
 php artisan make:auth
 ```
 
-
+注意不是单纯的复制，要修改所有控制器的正确命名空间
 
 ### 添加路由Auth::routes();到对应位置
 
@@ -88,8 +88,11 @@ protected function guard(){
 public function logout(Request $request){
     $this->guard()->logout();
     $request->session()->invalidate();
-    return $this->loggedOut($request) ?: redirect('/admin/login');//退出后跳回登录页
-}
+    return $this->loggedOut($request) ?: ($request->ajax() ?
+            response()->json([
+                                 'code' => 200, 'msg' => '退出成功', //ajax请求则返回数据
+                                 'data' => ['url' => '/admin/login'],
+                             ]) : redirect('/admin/login'));//退出后跳回登录页
 ```
 
 #### 覆盖validateLogin方法
@@ -106,7 +109,29 @@ protected function validateLogin(Request $request){
 }
 ```
 
+#### 覆盖sendLoginResponse方法
+
+ajax请求时才需要覆盖
+
+```
+protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+        $this->clearLoginAttempts($request);
+        
+        return $this->authenticated($request, $this->guard()->user()) ?:
+            ($request->ajax() ? response()->json([  //ajax请求则返回数据
+                                                     'code' => 200,
+                                                     'msg'  => '登录成功',
+                                                     'data' => ['url' => $this->redirectPath()],
+                                                 ]) :
+                redirect()->intended($this->redirectPath()));
+    }
+```
+
 ### 更改登录视图表单相应提交地址
+
+ajax提交要做相应调整
 
 ### 修改Admin模型头部继承
 
@@ -173,7 +198,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
 });
 ```
 
-### 需要登录的方法如果为登录跳回登录页
+### 需要登录的方法如果未登录跳回登录页
 
 覆盖错误异常App\Exceptions\Handler类的父类unauthenticated方法
 在App\Exceptions\Handler类中添加以下方法
@@ -194,24 +219,18 @@ protected function unauthenticated($request,\Illuminate\Auth\AuthenticationExcep
 }
 ```
 
-### 账号或密码错误时中文提示
+### 其它步骤
 
-```
-@if ($errors->has('username'))
-    {{$errors->first('username')=='These credentials do not match our records.'?'账号或密码错误':$errors->first('username')}}
-@endif
-```
+还有一些步骤是在开始开发时就必须完成的，比如说，引入中文包。
 
-暂时只想到这个方法，应该还有更专业的方法
-
-## 注册功能示例
+# 注册功能示例
 
 依照登录功能自己摸索，很简单的。
 
-## 修改密码示例
+# 修改密码示例
 
 依照登录功能自己摸索，很简单的。
 
-## 找回密码示例
+# 找回密码示例
 
 依照登录功能自己摸索，很简单的。
