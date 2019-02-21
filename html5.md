@@ -285,9 +285,9 @@ canvas方法或属性
 
 ### 画布控制
 
-• context.scale(scalewidth,scaleheight)      缩放处理 1=100%
-• context.translate(x,y)           图形位置处理
-• context.rotate(angle) 旋转画布,单位：弧度，默认以画布为圆心旋转
+• context.scale(scalewidth,scaleheight)      缩放画布；缩放处理 1=100%
+• context.translate(x,y)        平移画布；   图形位置处理
+• context.rotate(angle)  旋转画布,单位：弧度，默认以画布为圆心旋转；例：30°=30*Math.PI/180
 
 
 ### 文本控制
@@ -327,20 +327,6 @@ height可选。要使用的图像的高度。（伸展或缩小图像）
 注意:参数数量不同，x、y的函数不同
 
 ### 常用功能
-
-#### 画圆弧
-
-• context.arc(x,y,r,sAngle,eAngle,counterclockwise) 创建弧/曲线（用于创建
-圆形或部分圆）
-参数说明：
-x 圆的中心的 x 坐标。
-y 圆的中心的 y 坐标。
-r 圆的半径。
-sAngle 起始角，以弧度计。（弧的圆形的三点钟位置是 0 
-度）。
-eAngle 结束角，以弧度计。
-counterclockwise 可选。False = 顺时针，true = 逆时针。
-弧度计算公式： 角度*Math.PI/180
 
 #### 绘制线
 
@@ -465,6 +451,122 @@ counterclockwise 可选。False = 顺时针，true = 逆时针。
 </html>
 ```
 
+#### 画圆弧
 
+• context.arc(x,y,r,sAngle,eAngle,counterclockwise) 创建弧/曲线（用于创建
+圆形或部分圆）
+参数说明：
+x 圆的中心的 x 坐标。
+y 圆的中心的 y 坐标。
+r 圆的半径。
+sAngle 起始角，以弧度计。（弧的圆形的三点钟位置是 0 度）。
+eAngle 结束角，以弧度计。
+counterclockwise 可选。False = 顺时针，true = 逆时针。
+弧度计算公式： 角度*Math.PI/180
 
-### 
+#### 画扇形
+
+```
+<body>	
+	<canvas id="canvas" width="800" height="500"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+		cv.lineWidth = 5;
+		cv.strokeStyle = 'yellow';
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,0,90*Math.PI/180);
+		cv.closePath();
+		cv.stroke();
+		cv.fillStyle = 'pink';
+		cv.fill();
+	</script>	
+</body>
+```
+
+#### 吃豆人
+
+```
+
+```
+
+#### 饼状图
+
+```
+
+```
+
+#### 绘制文字
+
+```
+<body>
+	<canvas id="canvas" width="800" height="500"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+		cv.fillStyle = 'yellow';
+//		设置文字大小和字体
+		cv.font = '50px 黑体';
+		cv.fillText('祖国万岁',100,100,600);
+		
+		cv.strokeStyle = 'yellow';
+		cv.strokeText('祖国万岁',200,220);
+	</script>	
+</body>
+
+```
+
+#### 验证码
+
+```
+<body>
+	<canvas id="canvas" width="200" height="50"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+
+		cv.fillStyle = 'yellow';
+		cv.font = '30px arial';
+		var words = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+
+		for (var i=0;i<4;i++) {
+			var num = Math.floor(Math.random()*(words.length-1+1-0)+0);
+//			随机位置
+			var l = Math.floor(Math.random()*((i*50+20)+1-i*50)+i*50);
+			var t = Math.floor(Math.random()*(45+1-30)+30);
+			var r = Math.floor(Math.random()*256);
+			var g = Math.floor(Math.random()*256);
+			var b = Math.floor(Math.random()*256);
+			cv.fillStyle = 'rgb('+r+','+g+','+b+')';
+//			随机角度
+			var d = Math.floor(Math.random()*(5+1+5)-5);
+			cv.rotate(d*Math.PI/180);
+			cv.fillText(words[num],l,t);
+						
+		}
+		
+//      干绕线
+		for (var i=0;i<10;i++) {
+			var startx = Math.floor(Math.random()*201);
+			var starty = Math.floor(Math.random()*51);
+			var endx = Math.floor(Math.random()*201);
+			var endy = Math.floor(Math.random()*51);
+			cv.beginPath();
+			cv.moveTo(startx,starty);
+			cv.lineTo(endx,endy);
+			cv.closePath();
+			var r = Math.floor(Math.random()*256);
+			var g = Math.floor(Math.random()*256);
+			var b = Math.floor(Math.random()*256);
+			var o = Math.floor(Math.random()*101);
+			cv.strokeStyle = 'rgba('+r+','+g+','+b+','+o/100+')';
+			cv.stroke();
+		}	
+	</script>	
+</body>
+```
+
