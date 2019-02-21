@@ -326,7 +326,9 @@ width 可选。要使用的图像的宽度。（伸展或缩小图像）
 height可选。要使用的图像的高度。（伸展或缩小图像）
 注意:参数数量不同，x、y的函数不同
 
-### 画圆弧
+### 常用功能
+
+#### 画圆弧
 
 • context.arc(x,y,r,sAngle,eAngle,counterclockwise) 创建弧/曲线（用于创建
 圆形或部分圆）
@@ -340,7 +342,7 @@ eAngle 结束角，以弧度计。
 counterclockwise 可选。False = 顺时针，true = 逆时针。
 弧度计算公式： 角度*Math.PI/180
 
-### 绘制线
+#### 绘制线
 
 ```
 <canvas id="canvas" width="300" height="300"></canvas>
@@ -361,7 +363,7 @@ counterclockwise 可选。False = 顺时针，true = 逆时针。
 </script>
 ```
 
-### 绘制矩形
+#### 绘制矩形
 
 ```
 <canvas id="canvas" width="300" height="300"></canvas>
@@ -383,6 +385,84 @@ counterclockwise 可选。False = 顺时针，true = 逆时针。
     //实心矩形
     obj.fillRect(220,220,100,100);
 </script>
+```
+
+#### 画板效果
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+    canvas{
+        background: #272822;
+        margin: 0 auto;
+        display: block;
+        position: relative;
+    }
+    #color{
+    	margin-left: 200px;
+    }
+</style>
+</head>
+<body>
+    <input type="color" id="color" />
+    <input type="range" id="range" min="1" max="20" value="3" />
+    <span id="r">3</span>
+    <input type="button" id="e" value="橡皮擦"  />
+    <canvas id="canvas" width="800" height="500"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+		var color = document.getElementById("color");
+		var range = document.getElementById("range");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+		cv.strokeStyle = 'yellow';
+		cv.lineWidth = 3;
+		canvas.onmousedown = function(e){
+			var ev = window.event || e;
+//			获得鼠标位置
+			var mousex = ev.layerX || ev.offsetX;
+			var mousey = ev.layerY || ev.offsetY;
+//			开启路径
+			cv.beginPath();
+//			设置起点
+			cv.moveTo(mousex,mousey);
+//			加鼠标移动事件
+			canvas.onmousemove = function(e){
+				var ev = window.event || e;
+				var newx = ev.layerX || ev.offsetX;
+				var newy = ev.layerY || ev.offsetY;
+				cv.lineTo(newx,newy);
+				cv.stroke();
+			}
+		}
+//		鼠标抬起事件
+		canvas.onmouseup = function(){
+//			结束路径
+			cv.closePath();
+//			取消鼠标移动事件
+			canvas.onmousemove = null;
+		}
+		color.onchange = function(){
+//			将用户选择的颜色设置给画板
+			cv.strokeStyle = this.value;
+		}
+		range.onchange = function(){
+//			将用户拖动的值设置给线条粗细
+			cv.lineWidth = this.value;
+			document.getElementById("r").innerHTML = this.value;
+		}
+//		橡皮擦
+		document.getElementById("e").onclick = function(){
+			alert('开始尽情擦黑板吧！');
+			cv.strokeStyle = '#272822';
+		}
+	</script>
+</body>
+</html>
 ```
 
 
