@@ -186,3 +186,51 @@ transition-timing-function有6个可能值：
 • skew(angle,angle)       扭曲效果  skew(30deg,60deg)
 **transform-origin**：设置旋转元素的基点位置
 语法：transform-origin: 20% 40%;
+
+## 元素水平垂直居中
+
+**如果元素有固定的宽高**
+
+```
+#方法一：
+#box{
+    width: 400px;
+    height: 260px;
+    background: mediumpurple;
+    /*如果元素有固定的宽高*/
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+#方法二：
+#box{
+    width: 400px;
+    height: 260px;
+    background: mediumpurple;
+    /*如果元素有固定的宽高*/
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -130px;
+}
+```
+
+**如果元素没有固定的宽高**
+
+```
+#box{
+    width: 400px;
+    background: mediumpurple;
+    /*如果元素没有固定的宽高*/
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+```
+
