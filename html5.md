@@ -643,3 +643,9 @@ counterclockwise 可选。False = 顺时针，true = 逆时针。
 </body>
 ```
 
+## 移动端兼容标签
+
+```
+<meta name="viewport" content="width=deivce-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" />
+```
+

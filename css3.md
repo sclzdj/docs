@@ -167,6 +167,8 @@ outline-color    规定边框的颜色
 outline-style     规定边框的样式
 outline-width   规定边框的宽度
 
+• outline -radius 轮廓边角，要加浏览器前缀 
+
 ## 过渡动画
 
 • 过渡效果允许css的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、
@@ -428,5 +430,40 @@ https://daneden.github.io/animate.css/
 ```
 <link rel="stylesheet" type="text/css" href="animate.min.css"/>
 <h2 class="animated bounce">hell0</h2>
+```
+
+## Swiper
+
+#### 官网
+
+https://www.swiper.com.cn/
+
+#### API手册
+
+https://www.swiper.com.cn/api/index.html
+
+#### 使用方法
+
+https://www.swiper.com.cn/usage/index.html
+
+#### 动画
+
+https://www.swiper.com.cn/usage/animate/index.html
+
+#### 同页面多个swiper
+
+从第二个开始最外层的div需要加上overflow和position样式
+
+```
+.swiper-container2{
+    width: 800px;
+    height: 200px;
+    border: 1px solid purple;
+    margin: 50px auto;
+    
+    /*需要加上这两个样式*/
+    overflow: hidden;
+    position: relative;
+}
 ```
 
