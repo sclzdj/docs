@@ -252,25 +252,28 @@ transition-timing-function有6个可能值：
 • Animation只应用在页面上已存在的DOM元素上，而且他跟Flash和JavaScript以及jQuery制作出来的动画效果又不一样，因为我们使用CSS3的Animation制作动画我们可以省去复杂的js,jquery代码。
 **@Keyframes**
 • keyframes即关键帧。一般和animation配合使用。用来安排运动过程。
-**简写： animation: name duration timing-function delay iteration-count direction**
+**简写： animation: name duration timing-function delay iteration-count direction fill-mode**
+
+分写形式：
+
 **animation-name**
 • 定义一个动画的名称。
 **animation-duration**
 • 指定动画播放时长，单位为s(秒),默认值为“0”。
 **animation-timing-function**
-• 动画的播放方式。和transition中的transition-timing-function一样，具有以下
-六种变换方式：ease;ease-in;ease-in-out;linear;cubic-bezier。
+• 动画的播放方式。和transition中的transition-timing-function一样，具有以下六种变换方式：ease;ease-in;ease-in-out;linear;cubic-bezier。
 **animation-delay**
 • 指定延迟时间。单位为s(秒)，其默认值也是0。这个属性和transition-delay使用方法是一样的。
 **animation-iteration-count**
 • 指定元素播放动画的循环次数，其默认值为“1”；infinite为无限次数循环。
 **animation-direction**
 • 是否应该轮流反向播放动画
-• 如果 animation-direction 值是 "alternate"，则动画会在奇数次数
-（1、3、5 等等）正常播放，而在偶数次数（2、4、6 等等）向后播放。
+• 如果 animation-direction 值是 "alternate"，则动画会在奇数次数（1、3、5 等等）正常播放，而在偶数次数（2、4、6 等等）向后播放。
+**animation-fill-mode**
+• 控制元素动画的填充模式。有3个值，forwards、backwards和both。
+forwards：动画执行后，不返回初始状态。backwards：在延迟期间元素会保持运动的初始状态。both：forwards和backwards的效果同时存在。
 **animation-play-state**
-• 控制元素动画的播放状态。有两个值，running和paused其中
-running为默认值。他们的作用就类似于我们的音乐播放器一样，可以通过paused将正在播放的动画停下了，也可以通过running将暂停的动画重新播放。
+• 控制元素动画的播放状态。有两个值，running和paused其中running为默认值。他们的作用就类似于我们的音乐播放器一样，可以通过paused将正在播放的动画停下了，也可以通过running将暂停的动画重新播放。
 
 ```
 <!--示例-->
