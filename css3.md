@@ -379,3 +379,54 @@ forwards：动画执行后，不返回初始状态。backwards：在延迟期间
 #### flex
 
 定义**项目**的比例。
+
+## Jquery easing
+
+参数手册
+
+http://www.runoob.com/jqueryui/api-easings.html
+
+```
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="jquery.easing.1.3.min.js"></script>
+		<style type="text/css">
+			.box{
+				width: 300px;
+				height: 200px;
+				background: dodgerblue;
+				position: absolute;
+				left: 0px;
+				top: 50px;
+			}
+		</style>
+	</head>
+	<body>	
+		<input type="button" value="play" id="btn" />
+		<br /><br />
+		<div class="box"></div>
+		<script type="text/javascript">
+			$("#btn").click(function(){
+//				$(".box").animate({'left':600},3000,'easeOutElastic');
+				$(".box").animate({'top':450},3000,'easeOutBounce');
+			})	
+		</script>
+	</body>
+</html>
+```
+
+## Animate.css
+
+参数手册
+
+https://daneden.github.io/animate.css/
+
+```
+<link rel="stylesheet" type="text/css" href="animate.min.css"/>
+<h2 class="animated bounce">hell0</h2>
+```
+
