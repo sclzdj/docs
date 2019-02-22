@@ -489,13 +489,86 @@ counterclockwise 可选。False = 顺时针，true = 逆时针。
 #### 吃豆人
 
 ```
+<body>
+	<canvas id="canvas" width="800" height="500"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+		
+		cv.lineWidth = 5;
+		cv.strokeStyle = 'yellow';
 
+		cv.beginPath();
+		cv.moveTo(200,200);
+		cv.arc(200,200,100,-45*Math.PI/180,45*Math.PI/180,true);
+		cv.closePath();
+		cv.stroke();
+		
+		cv.fillStyle = 'yellow';
+		cv.fill();
+		
+		cv.arc(350,200,20,0,360*Math.PI/180);
+		cv.fill();
+		
+		cv.arc(450,200,20,0,360*Math.PI/180);
+		cv.fill();
+		
+		cv.arc(550,200,20,0,360*Math.PI/180);
+		cv.fill();
+	</script>
+</body>
 ```
 
 #### 饼状图
 
 ```
+<body>
+	<canvas id="canvas" width="800" height="500"></canvas>	
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+//		获得绘画环境(相当于铺了一层画布)
+		var cv = canvas.getContext('2d');
+		
+		cv.lineWidth = 5;
+		cv.strokeStyle = 'yellow';
 
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,0,60*Math.PI/180);
+		cv.closePath();
+		cv.fillStyle = 'pink';
+		cv.fill();
+		
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,60*Math.PI/180,110*Math.PI/180);
+		cv.closePath();
+		cv.fillStyle = 'greenyellow';
+		cv.fill();
+		
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,110*Math.PI/180,220*Math.PI/180);
+		cv.closePath();
+		cv.fillStyle = 'yellow';
+		cv.fill();
+	
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,220*Math.PI/180,300*Math.PI/180);
+		cv.closePath();
+		cv.fillStyle = 'deepskyblue';
+		cv.fill();
+		
+		cv.beginPath();
+		cv.moveTo(300,200);
+		cv.arc(300,200,150,300*Math.PI/180,360*Math.PI/180);
+		cv.closePath();
+		cv.fillStyle = 'orangered';
+		cv.fill();
+	</script>	
+</body>
 ```
 
 #### 绘制文字
