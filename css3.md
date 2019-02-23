@@ -432,6 +432,14 @@ https://daneden.github.io/animate.css/
 <h2 class="animated bounce">hell0</h2>
 ```
 
+## Zepto.js
+
+移动版的jquery，用法一模一样
+
+- touchstart  按下事件
+
+- touchend  抬起事件
+
 ## Swiper
 
 #### 官网
@@ -467,3 +475,156 @@ https://www.swiper.com.cn/usage/animate/index.html
 }
 ```
 
+#### 微场景
+
+傻瓜式商业平台：易企秀 http://www.eqxiu.com
+
+**原生开发一般步骤：**
+
+- 下载最新版swiper完整包，https://www.swiper.com.cn/download/index.html
+
+- 解压后在demos文件夹中找到合适的模板，可用谷歌手机模式查看
+
+- 将中意的模板文件复制到项目文件夹中
+
+- 将模板中引入的js和css文件也放到项目文件夹中，并引入模板里（完成之后，检查一下效果是否正常了）
+
+- 将模板中自带的css选择器.swiper-slide的样式删掉
+
+- 将你页面中需要体现的元素都布局到对应的div中
+
+- 将animate.min.css和swiper.animate1.0.3.min.js文件引入页面
+
+- 在模板最下方js配置项中增加以下配置
+
+  ```
+  on:{
+      init: function(){
+      	swiperAnimateCache(this); //隐藏动画元素 
+      	swiperAnimate(this); //初始化完成开始动画
+      }, 
+      slideChangeTransitionEnd: function(){ 
+      	swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+      } 
+  }
+  ```
+
+- 在需要运动的元素上添加class类**ani**
+
+- 在需要运动的元素上添加三个运动属性：
+
+  wiper-animate-effect：切换效果，例如 fadeInUp 
+  swiper-animate-duration：可选，动画持续时间（单位秒），例如 0.5s
+  swiper-animate-delay：可选，动画延迟时间（单位秒），例如 0.3s
+
+#### 自定义动画
+
+打字效果示例：
+
+- 在自己的css文件头部加上打字效果wchange样式运动规则
+
+  ```
+  /*自定义动画*/
+  @-webkit-keyframes wchange {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 70%;
+    }
+  }
+  @keyframes wchange {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 70%;
+    }
+  }
+  .wchange {
+    -webkit-animation-name: wchange;
+    animation-name: wchange;
+  }
+  /*自定义运动结束*/
+  ```
+
+- 文字样式调整
+
+  ```
+  .swiper-slide.two .top .o{
+  	position: absolute;
+  	left: 10%;
+  	top: 14%;
+  	font-size: 19px;
+  	color: white;
+  	/*打字效果需加上下面三个样式*/
+  	white-space: nowrap;
+  	width: 0;
+  	overflow: hidden;
+  }
+  ```
+
+- 调用打字效果规则wchange
+
+  ```
+  <p class="o ani" swiper-animate-effect="wchange" swiper-animate-duration="5s" swiper-animate-delay="1.3s">遇见你了</p>
+  ```
+
+## 移动端css3兼容性
+
+旋转解决示例：
+
+```
+#mpic{
+	width: 45px;
+	height: 45px;
+	position: fixed;
+	z-index: 99;
+	right: 6%;
+	top: 3%;
+	animation: r 5s linear infinite;
+	-webkit-animation: r 5s linear infinite;/*多加一份*/
+}
+@keyframes r{
+	from{
+		transform: rotate(0);
+	}
+	to{
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes r{/*多加一份*/
+	from{
+		-webkit-transform: rotate(0);
+	}
+	to{
+		-webkit-transform: rotate(360deg);
+	}
+}
+```
+
+## 移动端自动播放解决
+
+移动端不支持autoplay属性，解决办法，进入页面之后随便触碰一下页面就播放
+
+- 删除autoplay属性
+
+- js代码处理示例：
+
+  ```
+  //音乐控制
+  var musicplay = false;//播放状态标志，默认暂停
+  
+  //这里不能用ontouchstart事件!
+  document.ontouchend = function(){
+  	$("#music")[0].play();
+  	musicplay=true;
+  	//解除页面触碰事件
+  	document.ontouchend = null;
+  }
+  //如果引用了Zepto.js的话可以简写成下面的形式
+  //$(document).one('touchend',function(){
+  //	$("#music")[0].play();
+  //	musicplay=true;
+  //})
+  ```
