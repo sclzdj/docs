@@ -80,7 +80,7 @@ svnserve  -d  -r  h:/svnServer/app/shop     //启动shop仓库服务
 
 #### 更新仓库文件到本地
 
- 右键------> Update g
+ 右键------> Update
 
 #### 匿名账号权限
 
