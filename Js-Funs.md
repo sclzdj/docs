@@ -66,9 +66,9 @@ function delUrlParam(paramKey,url) {
         var urlParamArr = urlParam.split("&"); //将参数按照&符分成数组
         for (var i = 0; i < urlParamArr.length; i++) {
             var paramArr = urlParamArr[i].split("="); //将参数键，值拆开
-            //如果键雨要删除的不一致，则加入到参数中
+            //如果和要删除的不一致，则加入到参数中
             if(isArray(paramKey)){
-                if (inArray(paramKey, paramArr[0])) {
+                if (!inArray(paramKey, paramArr[0])) {
                     arr.push(urlParamArr[i]);
                 }
             }else{
