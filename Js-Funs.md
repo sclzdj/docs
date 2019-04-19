@@ -86,3 +86,37 @@ function delUrlParam(paramKey,url) {
 }
 ```
 
+#### postJump
+
+##### 模拟form表单的post跳转
+
+```javascript
+/*
+ * post跳转，模拟form表单的提交
+ * @param target 跳转地址
+ * @param params 参数 {name:'sclzdj',phone:'18353621790'}
+ * @param target 跳转方式：_self,_blank,不传默认_self
+ */
+function postJump(url, params, target) {
+    if (target === undefined) {
+        target = '_self';
+    }
+    //创建form表单
+    var temp_form = document.createElement("form");
+    temp_form.action = url;
+    temp_form.target = target;
+    temp_form.method = "post";
+    temp_form.style.display = "none";
+    //添加参数
+    for (var key in params) {
+        var opt = document.createElement("textarea");
+        opt.name = key;
+        opt.value = params[key];
+        temp_form.appendChild(opt);
+    }
+    document.body.appendChild(temp_form);
+    //提交数据
+    temp_form.submit();
+}
+```
+
