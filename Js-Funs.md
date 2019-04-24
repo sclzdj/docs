@@ -120,3 +120,29 @@ function postJump(url, params, target) {
 }
 ```
 
+#### serializeArrayToSubmitData
+
+##### 序列表单数据转提交对象
+
+```javascript
+/**
+ * 序列表单数据转提交对象
+ * *** require{jQuery}
+ * @param formData jquery用serializeArray方法序列化的表单数据
+ */
+function serializeArrayToSubmitData(formData){
+    var submitData = {};
+    $(formData).each(function (k, v) {
+        if (v.name.indexOf("[]") != -1) {
+            v.name = v.name.replace("[]", "");
+            if (submitData[v.name] === undefined) {
+                submitData[v.name] = [];
+            }
+            submitData[v.name].push(v.value);
+        } else {
+            submitData[v.name] = v.value;
+        }
+    });
+}
+```
+
