@@ -58,7 +58,12 @@ function delUrlParam(paramKey,url) {
         url = window.location.href;    //页面url
     }
     var urlParam = window.location.search.substr(1);   //页面参数
-    var beforeUrl = url.substr(0, url.indexOf("?"));   //页面主地址（参数之前地址）
+    var beforeUrl = '';//页面主地址（参数之前地址）
+    if (url.indexOf("?") != -1) {
+        beforeUrl = url.substr(0, url.indexOf("?"));
+    }else{
+        return url;
+    }
     var nextUrl = "";
 
     var arr = new Array();
