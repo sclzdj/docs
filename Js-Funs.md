@@ -65,7 +65,6 @@ function delUrlParam(paramKey,url) {
         return url;
     }
     var nextUrl = "";
-
     var arr = new Array();
     if (urlParam != "") {
         var urlParamArr = urlParam.split("&"); //将参数按照&符分成数组
@@ -138,6 +137,7 @@ function postJump(url, params, target) {
 function serializeArrayToSubmitData(formData){
     var submitData = {};
     $(formData).each(function (k, v) {
+        //下面是把多选项重组
         if (v.name.indexOf("[]") != -1) {
             v.name = v.name.replace("[]", "");
             if (submitData[v.name] === undefined) {
