@@ -16,7 +16,7 @@ https://atom.io/
 
 菜单栏：File->settings->install
 
-![rn1](C:\Users\Administrator\Desktop\docs\imgs\rn1.jpg)
+![rn1](RN.assets/rn1.jpg)
 
 一般要安装这几个插件（1、4）
 
@@ -26,7 +26,7 @@ mac ios比windows简单多了
 
 ### windows
 
-![rn2](C:\Users\Administrator\Desktop\docs\imgs\rn2.jpg)
+![rn2](RN.assets/rn2.jpg)
 
 - **安装Java sdk环境**
 
@@ -36,7 +36,7 @@ https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 > 安装Java SDK开发环境。
 
-![rn3](C:\Users\Administrator\Desktop\docs\imgs\rn3.png)
+![rn3](RN.assets/rn3.png)
 
 下载完成之后，开始安装。一直点击下一步，安装完成。
 
