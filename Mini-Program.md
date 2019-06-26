@@ -193,7 +193,13 @@ wxml文件调用
 
 ## wepy
 
-开发文档https://tencent.github.io/wepy/document.html#/
+开发文档
+
+V1：https://tencent.github.io/wepy/document.html#/
+
+V2：https://wepyjs.github.io/wepy-docs/
+
+以下都是wepy第一版的使用方式，第二版还是内测版，并且有很大的变化，不能完全按照下面的进行开发，可以参考自研小程序“鲸活动”，第二版遗留了一些问题未解决，比如html解析报错，最好等第二版正式发行后使用。
 
 ### 简单使用
 

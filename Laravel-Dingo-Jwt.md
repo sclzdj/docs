@@ -480,7 +480,7 @@ class AuthController extends BaseController
     public function __construct()
     {
         // 除login外都需要验证
-        $this->middleware('auth:admin', ['except' => ['login']]);
+        $this->middleware('jwt.auth:admin', ['except' => ['login']]);
     }
     /**
      * 响应token
@@ -509,14 +509,14 @@ class AuthController extends BaseController
     public function login()
     {
         $request = request(['username', 'password']);
-        if(!isset($request['username']) || $request['username']==='' || $request['username']===null){
-            return $this->response->errorUnauthorized('请输入帐号');
+        if (!isset($request['username']) || $request['username'] === '' || $request['username'] === null) {
+            return $this->response->error('请输入帐号',422);
         }
-        if(!isset($request['password']) || $request['password']==='' || $request['username']===null){
-            return $this->response->errorUnauthorized('请输入密码');
+        if (!isset($request['password']) || $request['password'] === '' || $request['username'] === null) {
+            return $this->response->error('请输入密码',422);
         }
-        if (!$token = auth('admin')->attempt($request)) {
-            return $this->response->errorUnauthorized('帐号或密码错误');
+        if (!$token = auth($this->guard)->attempt($request)) {
+            return $this->response->error('帐号或密码错误',422);
         }
         return $this->respondWithToken($token);
     }
