@@ -94,3 +94,47 @@ function file_moveDir($dir, $to) {
     }
 }
 ```
+
+## 日期系统
+
+####  datetime_fine_parse
+
+##### 精细化处理时间
+
+```php
+/**
+ * 精细化处理时间
+ *
+ * @param        $time   时间戳或者正确的时间格式
+ * @param string $format 格式
+ *
+ * @return false|string
+ */
+function datetime_fine_parse($time, $format = 'm-d') {
+    $timestamp = strtotime($time);
+    if ($timestamp === false) {
+        $timestamp = $time;
+    }
+    $nowtime = time();//获取现在的时间戳
+    $day = strtotime(date('Y-m-d'));//获取今天凌晨的时间戳
+    $pday = strtotime(date('Y-m-d', strtotime('-1 day'))); //获取昨天凌晨的时间戳
+    $qday = strtotime(date('Y-m-d', strtotime('-2 day'))); //获取前天凌晨的时间戳
+    $diff = $nowtime - $timestamp;
+    if ($timestamp < $qday) {//判断前天以前
+        return date($format, $timestamp);
+    } elseif ($timestamp < $pday && $time >= $qday) {//判断前天
+        return "前天";
+    } elseif ($timestamp < $day && $time >= $pday) {//判断昨天
+        return "昨天";
+    } elseif ($diff >= 3600 && $diff < 86400) {//判断24小时以内
+        return floor($diff / 3600).'小时前';
+    } elseif ($diff >= 60 && $diff < 3600) {//判断1小时以内
+        return floor($diff / 60).'分钟前';
+    } elseif ($diff >= 0 && $diff < 60) {//判断1分钟以内
+        return '刚刚';
+    } else {//判断未来
+        return date($format, $timestamp);
+    }
+}
+```
+

@@ -7,11 +7,11 @@
 ```javascript
 /**
  * 判断是否在数组中
- * @param arr 数组
  * @param item 判断条目
+ * @param arr 数组
  * @returns bool
  */
-function inArray(arr, item) {
+function inArray(item, arr) {
     var i = arr.length;
     while (i--) {
         if (arr[i] === item) {
