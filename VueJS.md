@@ -294,6 +294,11 @@
 #### v-cloak:去除闪屏
 
 ```
+<style>
+    [v-cloak]{
+    	display: none;
+    }
+</style>
 <div id="app" v-cloak>
 
 </div>

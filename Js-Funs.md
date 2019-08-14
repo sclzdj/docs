@@ -53,15 +53,18 @@ function isArray(value){
  * @param url 链接地址，不传默认为当前页面url
  * @returns url 处理后的链接地址
  */
-function delUrlParam(paramKey,url) {
-    if(url===undefined){
-        url = window.location.href;    //页面url
+function delUrlParam(paramKey, url) {
+    var urlParam='';//页面参数
+    if (url === undefined) {
+        url = window.location.href;    //当前页面url
+        urlParam = window.location.search.substr(1);
+    }else{
+        urlParam=url.substr(url.indexOf("?")+1);
     }
-    var urlParam = window.location.search.substr(1);   //页面参数
     var beforeUrl = '';//页面主地址（参数之前地址）
     if (url.indexOf("?") != -1) {
         beforeUrl = url.substr(0, url.indexOf("?"));
-    }else{
+    } else {
         return url;
     }
     var nextUrl = "";
@@ -71,15 +74,60 @@ function delUrlParam(paramKey,url) {
         for (var i = 0; i < urlParamArr.length; i++) {
             var paramArr = urlParamArr[i].split("="); //将参数键，值拆开
             //如果和要删除的不一致，则加入到参数中
-            if(isArray(paramKey)){
+            if (isArray(paramKey)) {
                 if (!inArray(paramKey, paramArr[0])) {
                     arr.push(urlParamArr[i]);
                 }
-            }else{
+            } else {
                 if (paramArr[0] != paramKey) {
                     arr.push(urlParamArr[i]);
                 }
             }
+        }
+    }
+    if (arr.length > 0) {
+        nextUrl = "?" + arr.join("&");
+    }
+    url = beforeUrl + nextUrl;
+    return url;
+}
+```
+
+#### updateUrlParam 
+
+##### 修改链接地址的某个参数
+
+```javascript
+/**
+ * 修改链接地址的某个参数，如果没有则补上
+ * @param paramKey 参数名
+ * @param paramValue 修改的值
+ * @param url
+ * @returns {*}
+ */
+function updateUrlParam(paramKey, paramValue,url) {
+    var urlParam='';//页面参数
+    if (url === undefined) {
+        url = window.location.href;    //当前页面url
+        urlParam = window.location.search.substr(1);
+    }else{
+        urlParam=url.substr(url.indexOf("?")+1);
+    }
+    var beforeUrl = '';//页面主地址（参数之前地址）
+    if (url.indexOf("?") != -1) {
+        beforeUrl = url.substr(0, url.indexOf("?"));
+    } else {
+        return url+'?'+paramKey+"="+paramValue;
+    }
+    var nextUrl = "";
+    var arr = new Array();
+    var urlParamArr = urlParam.split("&"); //将参数按照&符分成数组
+    for (var i = 0; i < urlParamArr.length; i++) {
+        var paramArr = urlParamArr[i].split("="); //将参数键，值拆开
+        if (paramArr[0] == paramKey) {
+            arr.push(paramKey+"="+paramValue);
+        }else{
+            arr.push(urlParamArr[i]);
         }
     }
     if (arr.length > 0) {
@@ -148,6 +196,7 @@ function serializeArrayToSubmitData(formData){
             submitData[v.name] = v.value;
         }
     });
+    return submitData;
 }
 ```
 
