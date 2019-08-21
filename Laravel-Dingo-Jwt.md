@@ -354,7 +354,7 @@ class AdminController extends AuthAdminController
 ### composer安装
 
 ```
-composer require tymon/jwt-auth:1.0.0-rc.2
+composer require tymon/jwt-auth:dev-develop --prefer-source
 ```
 
 ### 生成配置文件
