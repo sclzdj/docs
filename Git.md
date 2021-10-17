@@ -228,14 +228,6 @@ git archive master --prefix='hdcms/' --format=zip > hdcms.zip
 
 为了完成以下示例，你需要在`GitHub` 创建好仓库。
 
-![1526214082941](E:/%E5%90%8E%E7%9B%BE%E7%BD%91/%23code/code/docs/assets/1526214082941.png)
-
-
-
-
-
-![1526214156985](E:/%E5%90%8E%E7%9B%BE%E7%BD%91/%23code/code/docs/assets/1526214156985.png)
-
 #### SSH
 
 **生成秘钥**
@@ -251,8 +243,6 @@ ssh-keygen -t rsa
 一直按回车键直到结束。系统会在`~/.ssh` 目录中生成  `id_rsa`和`id_rsa.pub`，即密钥`id_rsa`和公钥`id_rsa.pub`。
 
 **向GitHub添加秘钥**
-
-![1526219105062](E:/%E5%90%8E%E7%9B%BE%E7%BD%91/%23code/code/docs/assets/1526219105062.png)
 
 点击 `New SSH key` 按钮，添加上面生成的 `id_rsa.pub` 公钥内容。
 
